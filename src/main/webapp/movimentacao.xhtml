@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Movimentações - StockPrime</ui:define>
+    <ui:define name="content">
+        <h:form id="frmMov">
+            <p:growl id="growl" showDetail="true"/>
+            <div class="page-header"><div><h1>Movimentações</h1><p>Registre entradas e saídas e atualize o saldo automaticamente.</p></div></div>
+            <div class="grid">
+                <div class="col-12 lg:col-4">
+                    <p:card>
+                        <f:facet name="title">Nova movimentação</f:facet>
+                        <div class="form-field" style="margin-bottom:1rem"><p:outputLabel for="produto" value="Produto"/><p:selectOneMenu id="produto" value="#{movimentacaoController.produtoId}" filter="true" filterMatchMode="contains" required="true" requiredMessage="Selecione o produto." style="width:100%"><f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/><f:selectItems value="#{movimentacaoController.produtos}" var="p" itemValue="#{p.id}" itemLabel="#{p.codigo} - #{p.nome} (saldo: #{p.estoqueAtual})"/></p:selectOneMenu></div>
+                        <div class="form-field" style="margin-bottom:1rem"><p:outputLabel for="tipo" value="Tipo"/><p:selectOneMenu id="tipo" value="#{movimentacaoController.tipo}" style="width:100%"><f:selectItems value="#{movimentacaoController.tipos}" var="t" itemValue="#{t}" itemLabel="#{t.descricao}"/></p:selectOneMenu></div>
+                        <div class="form-field" style="margin-bottom:1rem"><p:outputLabel for="qtd" value="Quantidade"/><p:inputNumber id="qtd" value="#{movimentacaoController.quantidade}" minValue="1" decimalPlaces="0" required="true"/></div>
+                        <div class="form-field" style="margin-bottom:1rem"><p:outputLabel for="obs" value="Observação"/><p:inputTextarea id="obs" value="#{movimentacaoController.observacao}" rows="3" maxlength="180"/></div>
+                        <p:commandButton value="Registrar movimentação" icon="pi pi-check" action="#{movimentacaoController.registrar}" update="@form" style="width:100%"/>
+                    </p:card>
+                </div>
+                <div class="col-12 lg:col-8">
+                    <p:card>
+                        <f:facet name="title">Histórico</f:facet>
+                        <p:dataTable value="#{movimentacaoController.movimentacoes}" var="m" paginator="true" rows="10" emptyMessage="Nenhuma movimentação registrada nesta execução." responsiveLayout="scroll">
+                            <p:column headerText="Data" style="width:145px"><h:outputText value="#{m.data}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/></h:outputText></p:column>
+                            <p:column headerText="Produto"><h:outputText value="#{m.produto.nome}"/></p:column>
+                            <p:column headerText="Tipo" style="width:100px"><span class="badge-status #{m.tipo.name() == 'ENTRADA' ? 'badge-ok' : 'badge-low'}">#{m.tipo.descricao}</span></p:column>
+                            <p:column headerText="Quantidade" style="width:100px;text-align:center"><h:outputText value="#{m.quantidade}"/></p:column>
+                            <p:column headerText="Observação"><h:outputText value="#{m.observacao}"/></p:column>
+                        </p:dataTable>
+                    </p:card>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

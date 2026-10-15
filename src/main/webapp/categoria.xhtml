@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Categorias - StockPrime</ui:define>
+    <ui:define name="content">
+        <h:form id="frmCategoria">
+            <p:growl id="growl" showDetail="true"/>
+            <div class="page-header"><div><h1>Categorias</h1><p>Organize os produtos por categoria.</p></div></div>
+            <p:card>
+                <div class="toolbar-row">
+                    <span class="ui-input-icon-left search-box"><i class="pi pi-search"/><p:inputText value="#{categoriaController.busca}" placeholder="Buscar categoria" style="width:100%"><p:ajax event="keyup" update="tabela" delay="300"/></p:inputText></span>
+                    <p:commandButton value="Nova categoria" icon="pi pi-plus" actionListener="#{categoriaController.prepararNovo}" update=":dlgCategoriaForm" oncomplete="PF('dlgCategoria').show()"/>
+                </div>
+                <p:dataTable id="tabela" value="#{categoriaController.categoriasFiltradas}" var="c" paginator="true" rows="8" emptyMessage="Nenhuma categoria encontrada." responsiveLayout="scroll">
+                    <p:column headerText="ID" style="width:70px"><h:outputText value="#{c.id}"/></p:column>
+                    <p:column headerText="Nome"><h:outputText value="#{c.nome}"/></p:column>
+                    <p:column headerText="Descrição"><h:outputText value="#{c.descricao}"/></p:column>
+                    <p:column headerText="Status" style="width:110px"><span class="badge-status #{c.ativa ? 'badge-ok' : 'badge-inactive'}">#{c.ativa ? 'Ativa' : 'Inativa'}</span></p:column>
+                    <p:column headerText="Ações" style="width:130px;text-align:center">
+                        <p:commandButton icon="pi pi-pencil" title="Editar" styleClass="ui-button-rounded ui-button-text" actionListener="#{categoriaController.setSelected(c)}" action="#{categoriaController.prepararEdicao}" update=":dlgCategoriaForm" oncomplete="PF('dlgCategoria').show()"/>
+                        <p:commandButton icon="pi pi-trash" title="Excluir" styleClass="ui-button-rounded ui-button-text ui-button-danger" actionListener="#{categoriaController.setSelected(c)}" update=":confirmCategoria" oncomplete="PF('confirmCategoriaWidget').show()"/>
+                    </p:column>
+                </p:dataTable>
+            </p:card>
+        </h:form>
+
+        <p:dialog id="dlgCategoria" widgetVar="dlgCategoria" header="Categoria" modal="true" resizable="false" width="520">
+            <h:form id="dlgCategoriaForm">
+                <p:messages showDetail="true"/>
+                <div class="form-grid">
+                    <div class="form-field full"><p:outputLabel for="nome" value="Nome"/><p:inputText id="nome" value="#{categoriaController.categoria.nome}" required="true" requiredMessage="Informe o nome." maxlength="60"/></div>
+                    <div class="form-field full"><p:outputLabel for="descricao" value="Descrição"/><p:inputTextarea id="descricao" value="#{categoriaController.categoria.descricao}" rows="3" maxlength="180"/></div>
+                    <div class="form-field"><p:outputLabel for="ativa" value="Categoria ativa"/><p:selectBooleanButton id="ativa" value="#{categoriaController.categoria.ativa}" onLabel="Sim" offLabel="Não"/></div>
+                </div>
+                <div class="dialog-actions">
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-button-secondary ui-button-outlined" onclick="PF('dlgCategoria').hide()"/>
+                    <p:commandButton value="Salvar" icon="pi pi-save" action="#{categoriaController.salvarOuAtualizar}" update=":frmCategoria :dlgCategoriaForm" oncomplete="if(!args.validationFailed) PF('dlgCategoria').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="confirmCategoriaForm">
+            <p:confirmDialog id="confirmCategoria" widgetVar="confirmCategoriaWidget" header="Confirmar exclusão" message="Deseja excluir a categoria selecionada?" severity="warn">
+            <p:commandButton value="Não" type="button" onclick="PF('confirmCategoriaWidget').hide()" styleClass="ui-button-secondary"/>
+            <p:commandButton value="Sim" icon="pi pi-trash" action="#{categoriaController.excluir}" update=":frmCategoria" oncomplete="PF('confirmCategoriaWidget').hide()" styleClass="ui-button-danger"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <div class="layout-topbar estoque-topbar">
+        <a href="#" id="layout-menu-btn" class="menu-btn"><i class="pi pi-bars"/></a>
+        <div class="topbar-title">
+            <span class="topbar-app-name">Controle de Estoque</span>
+            <span class="topbar-app-subtitle">Gestão de produtos e movimentações</span>
+        </div>
+        <div class="layout-topbar-menu-wrapper">
+            <h:form id="topbarForm">
+                <div class="usuario-box">
+                    <p:graphicImage name="images/avatar.png" library="manhattan-layout" styleClass="usuario-avatar"/>
+                    <span>
+                        <strong>#{loginController.usuario.nome}</strong>
+                        <small>Administrador</small>
+                    </span>
+                    <p:commandButton value="Sair" icon="pi pi-sign-out" actionListener="#{loginController.logout}" ajax="false" styleClass="ui-button-outlined ui-button-secondary"/>
+                </div>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>

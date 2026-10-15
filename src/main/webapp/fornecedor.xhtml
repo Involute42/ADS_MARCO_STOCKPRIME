@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Fornecedores - StockPrime</ui:define>
+    <ui:define name="content">
+        <h:form id="frmFornecedor">
+            <p:growl id="growl" showDetail="true"/>
+            <div class="page-header"><div><h1>Fornecedores</h1><p>Cadastro dos fornecedores do estoque.</p></div></div>
+            <p:card>
+                <div class="toolbar-row">
+                    <span class="ui-input-icon-left search-box"><i class="pi pi-search"/><p:inputText value="#{fornecedorController.busca}" placeholder="Buscar por razão social ou CNPJ" style="width:100%"><p:ajax event="keyup" update="tabela" delay="300"/></p:inputText></span>
+                    <p:commandButton value="Novo fornecedor" icon="pi pi-plus" actionListener="#{fornecedorController.prepararNovo}" update=":dlgFornecedorForm" oncomplete="PF('dlgFornecedor').show()"/>
+                </div>
+                <p:dataTable id="tabela" value="#{fornecedorController.fornecedoresFiltrados}" var="f" paginator="true" rows="8" emptyMessage="Nenhum fornecedor encontrado." responsiveLayout="scroll">
+                    <p:column headerText="Razão social"><h:outputText value="#{f.razaoSocial}"/></p:column>
+                    <p:column headerText="CNPJ"><h:outputText value="#{f.cnpj}"/></p:column>
+                    <p:column headerText="E-mail"><h:outputText value="#{f.email}"/></p:column>
+                    <p:column headerText="Telefone"><h:outputText value="#{f.telefone}"/></p:column>
+                    <p:column headerText="Status" style="width:100px"><span class="badge-status #{f.ativo ? 'badge-ok' : 'badge-inactive'}">#{f.ativo ? 'Ativo' : 'Inativo'}</span></p:column>
+                    <p:column headerText="Ações" style="width:130px;text-align:center">
+                        <p:commandButton icon="pi pi-pencil" styleClass="ui-button-rounded ui-button-text" actionListener="#{fornecedorController.setSelected(f)}" action="#{fornecedorController.prepararEdicao}" update=":dlgFornecedorForm" oncomplete="PF('dlgFornecedor').show()"/>
+                        <p:commandButton icon="pi pi-trash" styleClass="ui-button-rounded ui-button-text ui-button-danger" actionListener="#{fornecedorController.setSelected(f)}" oncomplete="PF('confirmFornecedorWidget').show()"/>
+                    </p:column>
+                </p:dataTable>
+            </p:card>
+        </h:form>
+
+        <p:dialog widgetVar="dlgFornecedor" header="Fornecedor" modal="true" resizable="false" width="620">
+            <h:form id="dlgFornecedorForm">
+                <p:messages showDetail="true"/>
+                <div class="form-grid">
+                    <div class="form-field full"><p:outputLabel for="razao" value="Razão social"/><p:inputText id="razao" value="#{fornecedorController.fornecedor.razaoSocial}" required="true" requiredMessage="Informe a razão social." maxlength="80"/></div>
+                    <div class="form-field"><p:outputLabel for="cnpj" value="CNPJ"/><p:inputText id="cnpj" value="#{fornecedorController.fornecedor.cnpj}" required="true" requiredMessage="Informe o CNPJ." maxlength="18"/></div>
+                    <div class="form-field"><p:outputLabel for="telefone" value="Telefone"/><p:inputText id="telefone" value="#{fornecedorController.fornecedor.telefone}" maxlength="20"/></div>
+                    <div class="form-field full"><p:outputLabel for="email" value="E-mail"/><p:inputText id="email" value="#{fornecedorController.fornecedor.email}" maxlength="80"/></div>
+                    <div class="form-field"><p:outputLabel for="ativo" value="Fornecedor ativo"/><p:selectBooleanButton id="ativo" value="#{fornecedorController.fornecedor.ativo}" onLabel="Sim" offLabel="Não"/></div>
+                </div>
+                <div class="dialog-actions">
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-button-secondary ui-button-outlined" onclick="PF('dlgFornecedor').hide()"/>
+                    <p:commandButton value="Salvar" icon="pi pi-save" action="#{fornecedorController.salvarOuAtualizar}" update=":frmFornecedor :dlgFornecedorForm" oncomplete="if(!args.validationFailed) PF('dlgFornecedor').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="confirmFornecedorForm">
+            <p:confirmDialog widgetVar="confirmFornecedorWidget" header="Confirmar exclusão" message="Deseja excluir o fornecedor selecionado?" severity="warn">
+            <p:commandButton value="Não" type="button" onclick="PF('confirmFornecedorWidget').hide()" styleClass="ui-button-secondary"/>
+            <p:commandButton value="Sim" icon="pi pi-trash" action="#{fornecedorController.excluir}" update=":frmFornecedor" oncomplete="PF('confirmFornecedorWidget').hide()" styleClass="ui-button-danger"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title">Dashboard - StockPrime</ui:define>
+    <ui:define name="content">
+        <div class="page-header">
+            <div><h1>Dashboard</h1><p>Visão geral do estoque.</p></div>
+            <p:button value="Nova movimentação" icon="pi pi-plus" outcome="/movimentacao.xhtml"/>
+        </div>
+        <div class="dashboard-grid">
+            <div class="metric-card"><div class="metric-icon"><i class="pi pi-box"/></div><div><strong>#{dashboardController.totalProdutos}</strong><span>Produtos cadastrados</span></div></div>
+            <div class="metric-card"><div class="metric-icon"><i class="pi pi-database"/></div><div><strong>#{dashboardController.totalItensEstoque}</strong><span>Itens em estoque</span></div></div>
+            <div class="metric-card"><div class="metric-icon"><i class="pi pi-exclamation-triangle"/></div><div><strong>#{dashboardController.produtosEstoqueBaixo}</strong><span>Com estoque baixo</span></div></div>
+            <div class="metric-card"><div class="metric-icon"><i class="pi pi-truck"/></div><div><strong>#{dashboardController.totalFornecedores}</strong><span>Fornecedores</span></div></div>
+        </div>
+        <p:card>
+            <f:facet name="title">Produtos que precisam de atenção</f:facet>
+            <p:dataTable value="#{dashboardController.listaEstoqueBaixo}" var="p" emptyMessage="Nenhum produto com estoque baixo." responsiveLayout="scroll">
+                <p:column headerText="Código"><h:outputText value="#{p.codigo}"/></p:column>
+                <p:column headerText="Produto"><h:outputText value="#{p.nome}"/></p:column>
+                <p:column headerText="Categoria"><h:outputText value="#{p.categoria.nome}"/></p:column>
+                <p:column headerText="Saldo" style="text-align:center"><span class="badge-status badge-low">#{p.estoqueAtual}</span></p:column>
+                <p:column headerText="Mínimo" style="text-align:center"><h:outputText value="#{p.estoqueMinimo}"/></p:column>
+            </p:dataTable>
+        </p:card>
+    </ui:define>
+</ui:composition>

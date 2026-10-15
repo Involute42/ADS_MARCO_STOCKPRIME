@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/manhattan">
+    <div class="layout-sidebar">
+        <div class="layout-sidebar-logo estoque-logo">
+            <i class="pi pi-box"></i>
+            <span>StockPrime</span>
+            <a href="#" id="layout-sidebar-anchor" class="layout-sidebar-anchor" title="Alternar menu"><i class="pi"/></a>
+        </div>
+        <div class="layout-menu-container">
+            <h:form id="menuform">
+                <pm:menu widgetVar="ManhattanMenuWidget">
+                    <p:menuitem value="Dashboard" icon="pi pi-fw pi-home" outcome="/index.xhtml"/>
+                    <p:menuitem value="Produtos" icon="pi pi-fw pi-box" outcome="/produto.xhtml"/>
+                    <p:menuitem value="Categorias" icon="pi pi-fw pi-tags" outcome="/categoria.xhtml"/>
+                    <p:menuitem value="Fornecedores" icon="pi pi-fw pi-truck" outcome="/fornecedor.xhtml"/>
+                    <p:menuitem value="Movimentações" icon="pi pi-fw pi-sort-alt" outcome="/movimentacao.xhtml"/>
+                </pm:menu>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>
