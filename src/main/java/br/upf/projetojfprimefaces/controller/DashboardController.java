@@ -5,6 +5,7 @@ import br.upf.projetojfprimefaces.store.EstoqueStore;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Named
@@ -19,4 +20,11 @@ public class DashboardController {
     public int getProdutosEstoqueBaixo() { return store.getProdutosEstoqueBaixo().size(); }
     public List<ProdutoEntity> getListaEstoqueBaixo() { return store.getProdutosEstoqueBaixo(); }
     public int getTotalItensEstoque() { return store.getProdutos().stream().mapToInt(ProdutoEntity::getEstoqueAtual).sum(); }
+
+    public BigDecimal getValorTotalEstoque() {
+        return store.getProdutos().stream()
+                .filter(produto -> produto.getPreco() != null)
+                .map(produto -> produto.getPreco().multiply(BigDecimal.valueOf(produto.getEstoqueAtual())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
