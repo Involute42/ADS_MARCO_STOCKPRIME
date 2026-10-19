@@ -15,6 +15,7 @@
             <div class="metric-card"><div class="metric-icon"><i class="pi pi-database"/></div><div><strong>#{dashboardController.totalItensEstoque}</strong><span>Itens em estoque</span></div></div>
             <div class="metric-card"><div class="metric-icon"><i class="pi pi-exclamation-triangle"/></div><div><strong>#{dashboardController.produtosEstoqueBaixo}</strong><span>Com estoque baixo</span></div></div>
             <div class="metric-card"><div class="metric-icon"><i class="pi pi-truck"/></div><div><strong>#{dashboardController.totalFornecedores}</strong><span>Fornecedores</span></div></div>
+            <div class="metric-card"><div class="metric-icon"><i class="pi pi-dollar"/></div><div><strong><h:outputText value="#{dashboardController.valorTotalEstoque}"><f:convertNumber type="currency" currencySymbol="R$" locale="pt_BR"/></h:outputText></strong><span>Valor total do estoque</span></div></div>
         </div>
         <p:card>
             <f:facet name="title">Produtos que precisam de atenção</f:facet>
